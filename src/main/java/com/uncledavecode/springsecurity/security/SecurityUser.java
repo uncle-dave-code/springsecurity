@@ -1,12 +1,11 @@
 package com.uncledavecode.springsecurity.security;
 
-import com.uncledavecode.springsecurity.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import com.uncledavecode.springsecurity.model.User;
 
 import java.util.Collection;
-import java.util.List;
 
 @AllArgsConstructor
 public class SecurityUser implements UserDetails {
@@ -14,18 +13,18 @@ public class SecurityUser implements UserDetails {
     private final User user;
 
     @Override
-    public String getUsername() {
-        return user.getUsername();
-    }
-
-    @Override
     public String getPassword() {
         return user.getPassword();
     }
 
     @Override
+    public String getUsername() {
+        return user.getUsername();
+    }
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(() -> "read");
+        return user.getAuthorities().stream().map(SecurityAuthority::new).toList();
     }
 
     @Override

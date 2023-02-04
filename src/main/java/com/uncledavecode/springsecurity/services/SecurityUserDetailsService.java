@@ -16,15 +16,15 @@ public class SecurityUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         var user = this.userRepository.findByUsername(username);
 
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User not found");
+        if(user.isPresent()){
+           return new SecurityUser(user.get());
         }
 
-        return new SecurityUser(user.get());
+        throw new UsernameNotFoundException("User not found: " + username);
     }
 }
